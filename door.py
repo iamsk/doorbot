@@ -12,7 +12,7 @@ def initcontroller():
     GPIO.setup(PORT, GPIO.OUT)
     GPIO.output(PORT, True)
 
-def opendoor():
+def open():
     GPIO.setup(PORT, GPIO.OUT)
     GPIO.output(PORT, False)
     time.sleep(2)

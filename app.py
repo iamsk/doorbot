@@ -12,6 +12,7 @@ import bsddb as bdb
 
 from bottle import route, run
 from bottle import template
+from bottle import request
 
 from door import open
 
@@ -25,25 +26,33 @@ class Borg():
     def __init__(self):
         self.__dict__ = self.__collective_mind
 
-    dbdoorbot = "doorbot.db"
-    db = bdb.hashopen(dbdoorbot, 'c')
-
-    def validate(username, password):
-        return True if db[username] == password else False
+    def validate(self, username, password):
+        dbdoorbot = "doorbot.db"
+        db = bdb.hashopen(dbdoorbot, 'c')
+        return True if username in db and db[username] == password else False
 
 
 borg = Borg()
 
 
-@route('/door')
-def door(method='POST'):
-    username = request.forms.get('username')
+@route('/door', method='POST')
+def door():
+    email = request.forms.get('email')
+    print email
     password = request.forms.get('password')
-    if borg.validate(username, password):
+    print password
+    if borg.validate(email, password):
         #door.open()
         return "Door opened!"
     else:
         return "Username/Password invalid!"
 
-run(host='0.0.0.0', port=8080, debug=True)
+
+@route('/demo')
+def demo():
+    return 'Hello world!'
+
+
+run(host='127.0.0.1', port=9001, debug=False)
+#run(host='0.0.0.0', port=9001, debug=False)
 
