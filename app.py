@@ -18,6 +18,7 @@ from bottle import template
 from bottle import request
 
 from door import open
+from logger import initlogger
 
 
 class Borg():
@@ -41,6 +42,7 @@ class Borg():
 
 
 borg = Borg()
+logger = initlogger()
 
 
 @route('/door', method='POST')
@@ -48,7 +50,7 @@ def door():
     email = request.forms.get('email')
     password = request.forms.get('password')
     if borg.validate(email, password):
-        print '%s login at  %s' % (email, datetime.now())
+        logger.info('%s logined in.' % email)
         open()
         return "Door opened!"
     else:
