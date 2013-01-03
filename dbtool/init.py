@@ -5,7 +5,7 @@ import hashlib
 
 dbdoorbot = "/home/pi/doorbot/doorbot.db"
 db = bdb.hashopen(dbdoorbot, 'c')
-password = hashlib.md5('853211')
+password = hashlib.md5('853211').hexdigest()
 reader = csv.reader(open("init.csv"))
 for email in reader:
     db[email] = password
