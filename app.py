@@ -4,10 +4,10 @@
 __author__ = 'iamsk'
 __email__ = 'iamsk.info@gmail.com'
 
-import sys,pickle
+import sys, pickle
 import time
 from datetime import datetime
-import base64,hashlib
+import base64, hashlib
 import subprocess
 import bsddb as bdb
 from paste import httpserver
@@ -32,6 +32,7 @@ class Borg():
     def validate(self, username, password):
         dbdoorbot = "/home/pi/doorbot/doorbot.db"
         db = bdb.hashopen(dbdoorbot, 'c')
+        password = hashlib.md5(password)
         return True if username in db and db[username] == password else False
 
 
