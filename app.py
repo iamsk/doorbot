@@ -36,7 +36,7 @@ class Borg():
         return True if username in self.db and self.db[username] == password else False
 
     def change_password(self, username, new_password):
-        new_password = hashlib.md5(password).hexdigest()
+        new_password = hashlib.md5(new_password).hexdigest()
         self.db[username] = new_password
 
 
