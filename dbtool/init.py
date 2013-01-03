@@ -8,5 +8,6 @@ db = bdb.hashopen(dbdoorbot, 'c')
 password = hashlib.md5('853211').hexdigest()
 reader = csv.reader(open("init.csv"))
 for email in reader:
-    db[email] = password
+    print email[0]
+    db[email[0]] = password
 
