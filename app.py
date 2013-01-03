@@ -28,12 +28,16 @@ class Borg():
     __collective_mind = {}
     def __init__(self):
         self.__dict__ = self.__collective_mind
+        dbdoorbot = "/home/pi/doorbot/doorbot.db"
+        self.db = bdb.hashopen(dbdoorbot, 'c')
 
     def validate(self, username, password):
-        dbdoorbot = "/home/pi/doorbot/doorbot.db"
-        db = bdb.hashopen(dbdoorbot, 'c')
-        password = hashlib.md5(password)
-        return True if username in db and db[username] == password else False
+        password = hashlib.md5(password).hexdigest()
+        return True if username in self.db and self.db[username] == password else False
+
+    def change_password(self, username, new_password):
+        new_password = hashlib.md5(password).hexdigest()
+        self.db[username] = new_password
 
 
 borg = Borg()
@@ -51,9 +55,36 @@ def door():
         return "Username/Password invalid!"
 
 
-@route('/demo')
-def demo():
-    return 'Hello world!'
+@route('/password')
+def password():
+    return """
+<!DOCTYPE html>
+<html>
+<head>
+<title>Password Change</title>
+</head>
+<body>
+<form action="/password_change" method="POST">
+    <p>Email: <input type="text" name="email" /></p>
+    <p>Old Password: <input type="text" name="old_password" /></p>
+    <p>New Password: <input type="text" name="new_password" /></p>
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>
+"""
+
+
+@route('/password_change', method='POST')
+def password_change():
+    email = request.forms.get('email')
+    old_password = request.forms.get('old_password')
+    new_password = request.forms.get('new_password')
+    if borg.validate(email, old_password):
+        borg.change_password(email, new_password)
+        return 'Changed success!'
+    else:
+        return "Username/Password invalid!"
 
 
 #run(host='127.0.0.1', port=9001, debug=False)
