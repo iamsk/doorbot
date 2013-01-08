@@ -39,6 +39,7 @@ class Borg():
     def change_password(self, username, new_password):
         new_password = hashlib.md5(new_password).hexdigest()
         self.db[username] = new_password
+        self.db.sync()
 
 
 borg = Borg()

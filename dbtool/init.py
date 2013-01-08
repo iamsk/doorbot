@@ -10,4 +10,5 @@ reader = csv.reader(open("init.csv"))
 for email in reader:
     print email[0]
     db[email[0]] = password
-
+    db.sync()
+db.close()

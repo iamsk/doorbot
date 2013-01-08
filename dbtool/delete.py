@@ -10,6 +10,10 @@ for key in db:
     if db[key] == password:
         del_list.append(key)
 
+count = 0
 for k in del_list:
-    del db[k]
+    print k
+    count += 1
+    #del db[k]
+print count
 
